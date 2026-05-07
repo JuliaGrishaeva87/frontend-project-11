@@ -6,8 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>frontend-project-11</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="d-flex flex-column min-vh-100">
+    <div id="app" class="flex-grow-1 container-60">
+      <section id="inputField" class="w-100">
+        <div class="row justify-content-center m-0">
+          <div class="mainField col-lg-8">
+            <h1 class="text-white mb-0">RSS агрегатор</h1>
+            <p class="text-white">Начните читать RSS сегодня! Это легко, это красиво.</p>
+            <form id="rss-form" class="row g-3 align-items-stretch">
+              <div class="col form-floating">
+                <input type="text" class="form-control" id="rss-input" name="rss" placeholder=" ">
+                <label for="rss-input">Ссылка RSS</label>
+              </div>
+              <div class="col-auto d-flex">
+                <button id="rss-submit" class="btn btn-secondary px-4" type="submit">Добавить</button>
+              </div>
+            </form>
+            
+            <p class="text-white-50 mt-2 mb-0 small">Пример: https://lorem-rss.hexlet.app/feed</p>
+            <p id="error-msg" class="feedback m-0 small"></p>
+          </div>
+        </div>
+      </section>
+      <section id="outputField" class="mt-4">
+      </section>
+    </div>
+    <footer class="py-3">
+      <div class="container-60">
+        <span class="text-muted">created by <a href="https://hexlet.io/">Hexlet</a></span>
+      </div>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
