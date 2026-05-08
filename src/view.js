@@ -1,20 +1,20 @@
 import { snapshot, subscribe } from 'valtio/vanilla'
 
-const renderErrorHandler = (errors, elements) => {
+const renderErrorHandler = (errors, elements, i18n) => {
   const { input, errorContainer } = elements
-  const errorMessage = errors.rss
-  if (errorMessage) {
+  const errorKey = errors.rss
+  if (errorKey) {
     input.classList.add('is-invalid')
     errorContainer.classList.remove('text-success')
     errorContainer.classList.add('text-danger')
-    errorContainer.textContent = errorMessage
+    errorContainer.textContent = i18n.t(errorKey)
   }
   else {
     input.classList.remove('is-invalid')
   }
 }
 
-const handleProcessState = (elements, process) => {
+const handleProcessState = (elements, process, i18n) => {
   switch (process) {
     case null:
       break
@@ -46,7 +46,7 @@ const handleProcessState = (elements, process) => {
       elements.input.classList.remove('is-invalid')
       elements.errorContainer.classList.remove('text-danger')
       elements.errorContainer.classList.add('text-success')
-      elements.errorContainer.textContent = 'RSS успешно добавлен'
+      elements.errorContainer.textContent = i18n.t('validation.valid')
       break
 
     default:
@@ -54,14 +54,14 @@ const handleProcessState = (elements, process) => {
   }
 }
 
-const watch = (elements, state) => {
+const watch = (elements, state, i18n) => {
   const render = (path, value) => {
     switch (path) {
       case 'form.status':
-        handleProcessState(elements, value)
+        handleProcessState(elements, value, i18n)
         break
       case 'form.errors':
-        renderErrorHandler(value, elements)
+        renderErrorHandler(value, elements, i18n)
         break
       default:
         break

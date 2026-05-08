@@ -11,19 +11,18 @@
       <section id="inputField" class="w-100">
         <div class="row justify-content-center m-0">
           <div class="mainField col-lg-8">
-            <h1 class="text-white mb-0">RSS агрегатор</h1>
-            <p class="text-white">Начните читать RSS сегодня! Это легко, это красиво.</p>
+            <h1 class="text-white mb-0" data-i18n="interface.title"></h1>
+            <p class="text-white" data-i18n="interface.subtitle"></p>
             <form id="rss-form" class="row g-3 align-items-stretch">
               <div class="col form-floating">
                 <input type="text" class="form-control" id="rss-input" name="rss" placeholder=" ">
-                <label for="rss-input">Ссылка RSS</label>
+                <label for="rss-input" data-i18n="interface.inputPlaceholderText"></label>
               </div>
               <div class="col-auto d-flex">
-                <button id="rss-submit" class="btn btn-secondary px-4" type="submit">Добавить</button>
+                <button id="rss-submit" class="btn btn-secondary px-4" type="submit" data-i18n="interface.addBtn"></button>
               </div>
             </form>
-            
-            <p class="text-white-50 mt-2 mb-0 small">Пример: https://lorem-rss.hexlet.app/feed</p>
+            <p class="text-white-50 mt-2 mb-0 small" data-i18n="interface.example"></p>
             <p id="error-msg" class="feedback m-0 small"></p>
           </div>
         </div>
@@ -31,10 +30,8 @@
       <section id="outputField" class="mt-4">
       </section>
     </div>
-    <footer class="py-3">
-      <div class="container-60">
+    <footer class="py-2 container-60">
         <span class="text-muted">created by <a href="https://hexlet.io/">Hexlet</a></span>
-      </div>
     </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
