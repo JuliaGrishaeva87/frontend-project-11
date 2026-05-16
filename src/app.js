@@ -3,12 +3,23 @@ import _ from 'lodash'
 import watch from './view.js'
 import { makeSchema } from './validation.js'
 import { renderStaticTexts } from './initHtml.js'
+import { buildProxyUrl, parseRSS } from './rss.js'
 import i18next from 'i18next'
 import resources from './locales/index'
+import axios from 'axios'
 
 const validate = (task, feeds) => {
-  const schema = makeSchema(feeds)
+  const addedUrls = feeds.map(feed => feed.url)
+  const schema = makeSchema(addedUrls)
   return schema.validate(task, { abortEarly: false })
+}
+
+const parseValidationErrors = (err) => {
+  if (err.inner) {
+    const errorsByPath = _.keyBy(err.inner, 'path')
+    return _.mapValues(errorsByPath, errorItem => errorItem.message.key)
+  }
+  return { rss: err.message.key }
 }
 
 const app = () => {
@@ -26,6 +37,7 @@ const app = () => {
         form: {
           status: null, // filling, submitting, validated, invalid
           errors: {},
+          message: null,
         },
       })
 
@@ -45,25 +57,37 @@ const app = () => {
 
       elements.form.addEventListener('submit', (e) => {
         e.preventDefault()
-        state.form.status = 'submitting'
         const formData = new FormData(e.target)
         const rssUrl = Object.fromEntries(formData)
+        state.form.status = 'submitting'
+        state.form.message = null
+
         validate(rssUrl, state.feeds)
-          .then((validData) => {
+          .then(validData => axios.get(buildProxyUrl(validData.rss)))
+          .then((response) => {
+            return parseRSS(response.data.contents)
+          })
+          .then((parsedData) => {
             state.form.errors = {}
+            parsedData.url = rssUrl.rss
+            state.feeds.push((parsedData))
+            state.form.message = 'validation.valid'
             state.form.status = 'validated'
-            state.feeds.push((validData.rss))
+            elements.form.reset()
           })
           .catch((err) => {
             state.form.status = 'invalid'
-            if (err.inner) {
-              const errorsByPath = _.keyBy(err.inner, 'path')
-              state.form.errors = _.mapValues(errorsByPath, (errorItem) => {
-                return errorItem.message.key
-              })
+            if (err.name === 'ValidationError') {
+              state.form.errors = parseValidationErrors(err)
+              state.form.message = Object.values(state.form.errors)[0]
+            }
+            else if (err.name === 'ParsingError') {
+              state.form.errors = { rss: 'validation.errors.invalidRss' }
+              state.form.message = 'validation.errors.invalidRss'
             }
             else {
-              state.form.errors = { rss: err.message.key }
+              state.form.errors = { rss: 'validation.errors.network' }
+              state.form.message = 'validation.errors.network'
             }
           })
       })

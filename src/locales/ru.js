@@ -15,8 +15,13 @@ export default {
         required: 'Не должно быть пустым',
         notOneOf: 'Этот RSS-канал уже добавлен',
         validURL: 'Ссылка должна быть валидным URL',
+        invalidRss: 'Не содержит RSS',
+        network: 'Ошибка сети',
       },
       valid: 'RSS успешно добавлен',
     },
+    postsList: 'Посты',
+    feedsList: 'Фиды',
+    previewButton: 'Просмотр',
   },
 }
